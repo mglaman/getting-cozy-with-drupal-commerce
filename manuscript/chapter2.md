@@ -4,7 +4,7 @@ Commerce handles pricing as a field on line items and products entities. The fie
 
 What makes this submodule unique is that it can be used in other use cases outside of a typical Commerce environment. The Commerce price module can be used whenever monetary data had to be handled, especially with multiple currency support. 
 
-Price is handled in a raw non-decimal amount. Different currencies use different formatters to signify the whole dollar amount to partial dollar amount. These currency functions reside within the actual commerce module and is part of the core functionality.
+Price is handled in a raw non-decimal amount. Different currencies use different formatters to signify the whole dollar amount to a partial dollar amount. These currency functions reside within the actual commerce module and is part of the core functionality.
 
 ##Rounding of prices
 Drupal 7's official requirement for PHP is 5.2.5 with a recommendation for 5.3. Rounding modes were not introduced until 5.3, and even then not all modes found in 5.4 were available. To circumvent compatibility issues, Commerce provides its own method of handling rounding.
@@ -55,7 +55,7 @@ I> ##Drupal's static cache
 I>
 I> Drupal provides two methods of caching: long term through the database, or short term per bootstrap in static caches. Static caching, called by `drupal_static()` improves performance by giving the module a place to store a compiled array and not having to rebuild it on each invocation. You can learn more through the Drupal API site: https://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/drupal_static/7
 
-If the list of currency components does not exist in Drupal's static cache, it will attempt to load the list from the database cache (unless passed the reset parameter.) If the cache does not exist, or is reset, the currency component arrays are set again in the cache table.
+If the list of currency components does not exist in Drupal's static cache, it will attempt to load the list from the database cache (unless passed the reset parameter.) If the cache does not exist or is reset, the currency component arrays are set again in the cache table.
 
 Once the currency components are compiled, it processes each currency and attaches default values to normalize the currency components. The minimum attributes for 
 
@@ -90,10 +90,10 @@ A single currency may not utilize each attribute, but it does provide the possib
 |Decimals            | How many integers make up the minor unit.|
 |Rounding step       | Declare how Commerce should handle round the integer.|
 |Thousands separator | Formatting mark to denote the thousands marker. |
-|Decimal separator   | Defines how to separator decimals, for example European currencies use "," |
+|Decimal separator   | Defines how to separator decimals, for example, European currencies use "," |
 |Symbol placement    | Sets the currency's symbol placement: before, after, or hidden. |
 |Symbol spacer       | Defaults to a space.               |
-|Code Placement      | Same as symbol placement, provides control of the ISO 4217 currency code: before, after, or hidden. |
+|Code Placement      | Same as symbol placement provides control of the ISO 4217 currency code: before, after, or hidden. |
 |Code Spacer         | Same as symbol spacer.             |
 
 Q> ###Currency rounding steps
@@ -119,7 +119,7 @@ The price converted to decimal is then passed through PHP's `number_format` func
       $currency['thousands_separator']
     );
 
-Number format will turn the decimal amount into more human readable format. The decimal amount is rounded to the currency's specifications. Decimals, decimals separator, and thousands separator are defined in currency components because they are parameters of the `number_format()` function.
+Number format will turn the decimal amount into a more human readable format. The decimal amount is rounded to the currency's specifications. Decimals, decimals separator, and thousands separator are defined in currency components because they are parameters of the `number_format()` function.
 
 Now that the price number has been converted to decimals and formatted it is wrapped with the other currency display options. Commerce handles this by utilizing the `t()` function and its keyword substitution. 
 
@@ -131,24 +131,24 @@ Currencies are able to be converted within Commerce to provide multiple currency
 
 Again, writing a custom callback is outside of the scope of this book, as is managing a store that supports multiple currencies. We'll highlight the default conversion function to detail the capabilities baked into Commerce.
 
-By default all currencies have a 1:1 conversion rate. Other modules can exposed a UI to manage these rates.
+By default, all currencies have a 1:1 conversion rate. Other modules can expose a UI to manage these rates.
 
 First, `commerce_currency_convert()` loads the currency referenced and checks if the conversion callback has been overridden. If it has it'll pass control and expect the callback to return the converted price amount. An example would be a module that provides dynamic conversion rates.
 
-The built in calculation takes the current price amount value and multiplies it by the current currency conversion rate and divides it by the target currency's conversion rate.
+The built-in calculation takes the current price amount value and multiplies it by the current currency conversion rate and divides it by the target currency's conversion rate.
 
 ###Numbers versus Decimals versus Strings
-The end result is simple addition of whole numbers that are provided by the price components in the price field. Price components are made up of a title, display title (optional), and a weight setting. Price components do define a price, but rather prices are given a price component. 
+The end result is the simple addition of whole numbers that are provided by the price components in the price field. Price components are made up of a title, display title (optional), and a weight setting. Price components do define a price, but rather prices are given a price component. 
 
 ##Price Components
 GET GRAPHIC OF REAL RECEIPT. REFERENCE. (right aligned?)
 
-Think of a price component as what makes the transaction details at the bottom of a receipt when you leave the grocery store. There is a line for the subtotal prior to any other additions or subtractions. Lets say you bought items that were on sale in-store but also discounted with coupons. There could be one line to signify the subtraction of all discounted costs, or one for each type. Finally, you purchased a few taxable items while at the store and now there is a total tax charged. This is exactly what the price components provide. To break it down further, each of those totals is actually addition of each item in your order’s price component.
+Think of a price component as what makes the transaction details at the bottom of a receipt when you leave the grocery store. There is a line for the subtotal prior to any other additions or subtractions. Let us say you bought items that were on sale in-store but also discounted with coupons. There could be one line to signify the subtraction of all discounted costs, or one for each type. Finally, you purchased a few taxable items while at the store and now there is a total tax charged. This is exactly what the price components provide. To break it down further, each of those totals is actually the addition of each item in your order’s price component.
 
 ![What makes ups up the array of a price component](images/Price_component_chart.png)
 
 
-Price components can be negative or positive to provide a way of adding fees, taxes, discounts, or coupon promotion redemption. The price module defines the base price component. This is the default comment applied to price fields to store input data. Base price has a weight of -50 and a display title of Subtotal. The negative weight ensures that when a price field is formatter to display component types site users will see Subtotal as the first item, which provides the original prices - just as your receipts do. Commerce Price provides a discount and fee price component type with a weight of 10 and 20 respectively. Out of the box the module provides a way to modify the base price with different components. Discount components are used to catalog negative numeric values and fees positive numeric values to alter the base price.
+Price components can be negative or positive to provide a way of adding fees, taxes, discounts, or coupon promotion redemption. The price module defines the base price component. This is the default comment applied to price fields to store input data. The base price has a weight of -50 and a display title of Subtotal. The negative weight ensures that when a price field is formatter to display component types site users will see Subtotal as the first item, which provides the original prices - just as your receipts do. Commerce Price provides a discount and fee price component type with a weight of 10 and 20 respectively. Out of the box, the module provides a way to modify the base price with different components. Discount components are used to catalog negative numeric values and fees positive numeric values to alter the base price.
 
 ![Components within a price field](images/Price_field_with_components.png)
 
@@ -156,7 +156,7 @@ The above figure uses the predefined price components and how they are attached 
 
 I> ###Use Case: Shipping Discounts
 I>
-I> Perhaps there is an ecommerce site that provides both product discounts and shipping discounts. To make customers realize what kind of discount they have received a Shipping Discount price component was created. The shipping promotion merely adds a price component of Shipping Discount with the discounted total, as a negative amount, to the shipping line item's price.
+I> Perhaps there is an e-commerce site that provides both product discounts and shipping discounts. To make customers realize what kind of discount they have received a Shipping Discount price component was created. The shipping promotion merely adds a price component of Shipping Discount with the discounted total, as a negative amount, to the shipping line item's price.
 
 This explanation and detail would suffice site builders or developers who are not going to directly modify price components. However, some want to get down and dirty and directly attach price components or manipulate the data. This is useful for programmatically applying discounts, or extracting components and performing operations with them, such as the Tax Reports submodule in the Commerce Reports contributed module. Price components are recursive in nature and one price component can contain multiple components of its own.
 
@@ -181,9 +181,9 @@ First we'll examine `hook_commerce_price_component_type_info`, which adds a new 
       );
     }
 
-Inside of the Commerce Price module, there is the `commerce_price_component_types()` function that polls all active modules for this hook to create the array of available components. The compiled array of components is then stored in Drupal's static cache.
+Inside of the Commerce Price module, the `commerce_price_component_types()` function that polls all active modules for this hook to create the array of available components. The compiled array of components is then stored in Drupal's static cache.
 
-As you noticed in our example we did not define a display title. In our case "Shipping Discount" works well as a administrative title and display title. Commerce Price does post processing on the array to ensure that each component is normalized.
+As you noticed in our example we did not define a display title. In our case "Shipping Discount" works well as an administrative title and display title. Commerce Price does post processing on the array to ensure that each component is normalized.
 
 
     // Add default values to the component type definitions.
@@ -199,7 +199,7 @@ Commerce Price ensures that all price components have a name key, display_title,
 
 Once the components have been bundled and normalized, other modules have the opportunity to manipulate the array of price components. Before returning the final value, Commerce Price invokes `hook_commerce_price_component_type_info_alter()`. This hook can be very useful when controlling the order total output when utilizing shipping, discounts, and tax. 
 
-Using our shipping discount example, lets say the client wanted the order total summary to be in a specific order. The request asks that the price component details are in the following order: subtotal (base price), discounts, shipping, shipping discounts, tax, then final total. Using the alter hook we could create a function to provide this ordering.
+Using our shipping discount example, let us say the client wanted the order total summary to be in a specific order. The request asks that the price component details are in the following order: subtotal (base price), discounts, shipping, shipping discounts, tax, then final total. Using the alter hook we could create a function to provide this ordering.
 
 
     function module_commerce_price_component_type_info_alter(&$component_types) {
@@ -215,7 +215,7 @@ These two simple hooks allow for a dynamic pricing structure. Field formatters c
 ###Adding a Price Component
 Price components are complex structures, but the Price module provides a simple way creating a new component, or attach a component to an existing one. The `commerce_price_component_add()` function takes four parameters with one optional one.
 * First, a **price** component is passed. This can be an empty array or an existing price component structure.
-* The **type** of component, which is the machine name of price component types in the system.
+* The **type** of the component, which is the machine name of price component types in the system.
 * **Component price** is the price array for the component, as defined by the price field.
 * The component passed can be flagged as **included**, to define if the price has been calculated into the overall total yet.
 * The optional field involves **adding a base price** automatically if one does not exist. If one does not exist, the passed **price** field will be assumed as the base price.
@@ -261,7 +261,7 @@ For example, if a product had a discount price component attached it would displ
 | Discount | $2.00 |
 | Price    | $3.75 |
 
-This formatter also provides `hook_commerce_price_formatted_components()`. Commmerce Price invokes this hook after the components have been compiled and sorted. This allows other module's to interact with the display price components within the table - such as removing or resorting.
+This formatter also provides `hook_commerce_price_formatted_components()`. Commerce Price invokes this hook after the components have been compiled and sorted. This allows other module's to interact with the display price components within the table - such as removing or resorting.
 
 ###Altering prices before view
 Commerce Price provides a way to manipulate displayed prices for robust price calculation. This will be covered more in depth in the product pricing module's chapter.
@@ -274,7 +274,7 @@ As stated in the introductory chapter, Commerce integrates with Rules to provide
 
 I> ###Rules is not a dependency
 I> 
-I> Rules integration is a soft dependency. Rules is not required for Commerce Price, but if Rules is enabled the functionality will become available.
+I> Rules integration is a soft dependency. The Rules module is not required for Commerce Price, but if Rules is enabled the functionality will become available.
 
 The module provides a price comparison condition. The default "Data comparison" condition only provides two options: "equals" or "is one of." These do not translate well to handling integers, especially when the item is made up of different attributes - amounts and currency codes.
 
