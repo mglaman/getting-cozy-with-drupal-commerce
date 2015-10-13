@@ -1,7 +1,7 @@
 # Getting Cozy with Drupal Commerce
 A developers guide book on Drupal Commerce to be published on LeanPub - https://leanpub.com/getting-cozy-with-drupal-commerce. Being written on GitHub so it can be freely available to the community with optional purchase (for PDF, mobile support.)
 
-![Title page](manuscript/images/title_page.png)
+![Title page](cover.png)
 
 ---
 
