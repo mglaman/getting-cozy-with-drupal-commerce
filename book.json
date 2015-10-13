@@ -1,0 +1,24 @@
+{
+    "name": "Getting Cozy with Drupal Commerce",
+    "version": "0.0.1",
+    "description": "Developer guide book for Drupal Commerce.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mglaman/getting-cozy-with-drupal-commerce.git"
+    },
+    "plugins": [
+        "ga"
+    ],
+    "pluginsConfig": {
+        "ga": {
+            "token": "UA-137814-14"
+        }
+    },
+    "styles": {
+        "website": "styles/all.css",
+        "ebook": "styles/all.css",
+        "pdf": "styles/all.css",
+        "mobi": "styles/all.css",
+        "epub": "styles/all.css"
+    }
+}
